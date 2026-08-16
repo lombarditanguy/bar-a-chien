@@ -13,6 +13,12 @@ function defaultState() {
       kibbleLevel: 0,
       expandBought: 0,
     },
+    // Compteurs pour les missions
+    stats: {
+      pets: 0,
+      served: 0,
+    },
+    questIndex: 0,
     settings: {
       sound: true,
     },
@@ -49,6 +55,7 @@ function loadState() {
     const def = defaultState();
     state = Object.assign(def, saved);
     state.upgrades = Object.assign(def.upgrades, saved.upgrades);
+    state.stats = Object.assign(def.stats, saved.stats);
     state.settings = Object.assign(def.settings, saved.settings);
     state.boosts = Object.assign(def.boosts, saved.boosts);
     migrateSave();

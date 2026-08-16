@@ -143,6 +143,7 @@ function buyExpand() {
 
 function petDog() {
   state.coins += CONFIG.petReward;
+  state.stats.pets++;
 }
 
 function renameDog(dogId, newName) {
@@ -182,6 +183,40 @@ function advanceCustomers(dt) {
 
 function payCustomer(amount) {
   state.coins += amount;
+  state.stats.served++;
+}
+
+// ---- Missions ----
+
+function currentQuest() {
+  return CONFIG.quests[state.questIndex] || null;
+}
+
+function questProgress(q) {
+  switch (q.type) {
+    case 'dogs': return state.dogs.length;
+    case 'pets': return state.stats.pets;
+    case 'served': return state.stats.served;
+    case 'accessories': return state.dogs.reduce((s, d) => s + d.accessories.length, 0);
+    case 'breeds': return state.unlockedBreeds.length;
+    case 'expand': return state.upgrades.expandBought;
+    case 'kibble': return state.upgrades.kibbleLevel;
+    default: return 0;
+  }
+}
+
+function questDone(q) {
+  return questProgress(q) >= q.n;
+}
+
+// Renvoie la mission accomplie (avec sa récompense créditée), ou null
+function claimQuest() {
+  const q = currentQuest();
+  if (!q || !questDone(q)) return null;
+  state.coins += q.reward;
+  state.questIndex++;
+  saveState();
+  return q;
 }
 
 // Gains accumulés pendant l'absence du joueur (calculés au chargement).

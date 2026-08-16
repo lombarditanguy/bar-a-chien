@@ -69,6 +69,58 @@ body {
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.12);
 }
 
+/* ---- Mission en cours ---- */
+
+#quest-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 12px 8px;
+}
+
+#quest-text {
+  background: #fff;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#quest-text.quest-done {
+  background: #eaffdf;
+  border: 2px solid var(--green);
+}
+
+#quest-claim {
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #7a4c00;
+  background: var(--coin);
+  border: none;
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15);
+  animation: claim-pulse 0.8s ease-in-out infinite;
+}
+
+#quest-claim.hidden { display: none; }
+
+/* Étoiles du chien magique */
+.spark {
+  animation: twinkle 1.4s ease-in-out infinite;
+}
+
+.spark-2 {
+  animation-delay: 0.7s;
+}
+
 /* ---- La scène du bar (SVG) ---- */
 
 #bar {
@@ -561,6 +613,16 @@ body {
 @keyframes hint-bounce {
   0%, 100% { transform: translate(-50%, -50%); }
   50% { transform: translate(-50%, -60%); }
+}
+
+@keyframes claim-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.15; }
 }
 
 @keyframes pop-in {

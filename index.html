@@ -17,6 +17,12 @@
     <div class="income-box" id="income-rate">+0 /s</div>
   </header>
 
+  <!-- Mission en cours -->
+  <div id="quest-bar">
+    <span id="quest-text">🎯 …</span>
+    <button id="quest-claim" class="hidden">🎁 +<span id="quest-reward">0</span></button>
+  </div>
+
   <!-- La scène du bar : tout est dessiné en SVG (aucune image externe) -->
   <main id="bar">
     <div id="scene">
@@ -34,6 +40,14 @@
             <rect x="31" width="2" height="12" fill="#c8955c"/>
             <rect x="7" y="12" width="2" height="12" fill="#c8955c"/>
           </pattern>
+          <!-- Collier du chien magique -->
+          <linearGradient id="rainbow" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#ff5f8f"/>
+            <stop offset="0.25" stop-color="#ffd23f"/>
+            <stop offset="0.5" stop-color="#8ecf4d"/>
+            <stop offset="0.75" stop-color="#6fb7e8"/>
+            <stop offset="1" stop-color="#b58ae0"/>
+          </linearGradient>
         </defs>
 
         <!-- Mur et sol -->

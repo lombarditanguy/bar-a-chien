@@ -17,13 +17,16 @@ vers le compteur) et repartent. Plus le bar a de chiens — et plus ils sont
 Le revenu moyen affiché « +N /s » = fréquence des clients × ce qu'ils paient.
 
 - L'argent vient des clients attirés par les chiens.
-- **Adopter** : ouvre le choix des races. 5 races avec des revenus croissants
-  (×1 à ×16) ; les races avancées se débloquent avec des pièces (🔒), puis
-  chaque adoption a un coût croissant. On nomme le chien à l'adoption.
-- **Fiche d'un chien** (toucher son nom ✏️) : renommer + acheter des
-  accessoires — 🎾 balle (+25 %), 🥣 gamelle (+25 %), 🛏️ panier (+50 %),
-  🎀 nœud (purement cosmétique, « pour le style ! »). Les accessoires
-  s'affichent sur la carte du chien.
+- **Adopter** : ouvre le choix des races. 11 races dessinées avec des revenus
+  croissants (×1 à ×1024, du Chiot au Chien magique ✨) ; les races avancées se
+  débloquent avec des pièces (🔒), puis chaque adoption a un coût croissant.
+  On nomme le chien à l'adoption.
+- **Fiche d'un chien** (toucher son nom ✏️) : renommer + acheter 7 accessoires
+  — balle (+25 %, le chien va la chercher !), gamelle (+25 %), nœud et chapeau
+  de fête (cosmétiques), panier (+50 %), lunettes de soleil (+25 %), os doré
+  (+75 %). Tous dessinés sur le chien.
+- **Missions** : objectifs successifs (adopter, caresser, servir des clients,
+  débloquer des races…) avec récompenses à réclamer — toujours un prochain but.
 - **Croquettes** : +1 pièce/s de base par chien à chaque niveau (multiplié
   par la race et les accessoires).
 - **Agrandir** : +2 emplacements (max 20).

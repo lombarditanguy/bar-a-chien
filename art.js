@@ -5,12 +5,20 @@
 // ============================================================
 
 // Apparence de chaque race : couleurs, oreilles, taille, détails
+// (long = corps allongé, spots = taches, faceMask = masque clair sur le visage,
+//  eyeColor = yeux colorés, barrel = tonneau de secours, sparkle = étoiles magiques)
 const BREED_ART = {
-  chiot:    { body: '#d9a066', belly: '#f6dcb4', ear: '#b57f45', ears: 'floppy', scale: 0.85 },
-  beagle:   { body: '#f6ecdd', belly: '#fdf8ef', ear: '#7a4a21', ears: 'floppy', scale: 0.95, patch: '#a9743c' },
-  labrador: { body: '#e8c07a', belly: '#f9e6bd', ear: '#cda45e', ears: 'floppy', scale: 1.05 },
-  caniche:  { body: '#f2dce4', belly: '#fbf1f5', ear: '#e3bccb', ears: 'curly',  scale: 1.0 },
-  berger:   { body: '#8a7258', belly: '#cdb798', ear: '#6d5942', ears: 'pointy', scale: 1.1, harness: '#e05252' },
+  chiot:        { body: '#d9a066', belly: '#f6dcb4', ear: '#b57f45', ears: 'floppy', scale: 0.85 },
+  beagle:       { body: '#f6ecdd', belly: '#fdf8ef', ear: '#7a4a21', ears: 'floppy', scale: 0.95, patch: '#a9743c' },
+  teckel:       { body: '#a4682f', belly: '#d6a06b', ear: '#7a4a21', ears: 'floppy', scale: 0.92, long: true },
+  labrador:     { body: '#e8c07a', belly: '#f9e6bd', ear: '#cda45e', ears: 'floppy', scale: 1.05 },
+  corgi:        { body: '#f3a35c', belly: '#fff4e4', ear: '#e0854a', ears: 'pointy', scale: 0.9 },
+  caniche:      { body: '#f2dce4', belly: '#fbf1f5', ear: '#e3bccb', ears: 'curly',  scale: 1.0 },
+  dalmatien:    { body: '#fbfbf5', belly: '#ffffff', ear: '#2d2d2d', ears: 'floppy', scale: 1.05, spots: '#2d2d2d' },
+  husky:        { body: '#9fb2c4', belly: '#f2f6f9', ear: '#7d92a6', ears: 'pointy', scale: 1.08, faceMask: true, eyeColor: '#4d9fe8' },
+  berger:       { body: '#8a7258', belly: '#cdb798', ear: '#6d5942', ears: 'pointy', scale: 1.1, harness: '#e05252' },
+  saintbernard: { body: '#b5743a', belly: '#f3e2c8', ear: '#8a5426', ears: 'floppy', scale: 1.22, faceMask: true, barrel: true },
+  magique:      { body: '#cfe0ff', belly: '#f0f6ff', ear: '#f2c4ef', ears: 'pointy', scale: 1.05, sparkle: true, eyeColor: '#b06fe0' },
 };
 
 function dogEars(a) {
@@ -47,6 +55,28 @@ function dogAccessories(accessories) {
             <path d="M9,-56 L0,-61 L0,-51 Z" fill="#ff5f8f"/>
             <circle cx="9" cy="-56" r="2.6" fill="#d8336b"/></g>`;
   }
+  if (accessories.includes('chapeau')) {
+    out += `<g class="acc acc-chapeau" transform="translate(-8,-51) rotate(-16)">
+            <path d="M-6,0 L6,0 L0,-15 Z" fill="#6fb7e8"/>
+            <path d="M-4.2,-4.5 L4.2,-4.5 L3,-7.5 L-3,-7.5 Z" fill="#ffd23f"/>
+            <circle cx="0" cy="-15" r="2.4" fill="#ff5f8f"/></g>`;
+  }
+  if (accessories.includes('lunettes')) {
+    out += `<g class="acc acc-lunettes">
+            <rect x="-12.5" y="-44.5" width="10" height="7.5" rx="3.4" fill="#2d2d2d"/>
+            <rect x="2.5" y="-44.5" width="10" height="7.5" rx="3.4" fill="#2d2d2d"/>
+            <rect x="-3" y="-43" width="6" height="2" fill="#2d2d2d"/>
+            <circle cx="-8" cy="-42.5" r="1.2" fill="#fff" opacity="0.6"/>
+            <circle cx="7" cy="-42.5" r="1.2" fill="#fff" opacity="0.6"/></g>`;
+  }
+  if (accessories.includes('os')) {
+    out += `<g class="acc acc-os" transform="translate(1,1) rotate(-10)">
+            <rect x="-5" y="-1.8" width="10" height="3.6" rx="1.8" fill="#ffd23f" stroke="#c79400" stroke-width="0.7"/>
+            <circle cx="-5" cy="-1.6" r="2.2" fill="#ffd23f" stroke="#c79400" stroke-width="0.7"/>
+            <circle cx="-5" cy="1.6" r="2.2" fill="#ffd23f" stroke="#c79400" stroke-width="0.7"/>
+            <circle cx="5" cy="-1.6" r="2.2" fill="#ffd23f" stroke="#c79400" stroke-width="0.7"/>
+            <circle cx="5" cy="1.6" r="2.2" fill="#ffd23f" stroke="#c79400" stroke-width="0.7"/></g>`;
+  }
   return out;
 }
 
@@ -55,23 +85,44 @@ function dogAccessories(accessories) {
 function dogSVG(breedId, accessories) {
   const a = BREED_ART[breedId] || BREED_ART.chiot;
   const acc = accessories || [];
+  const bodyRx = a.long ? 21 : 14;
   const collar = acc.includes('noeud') ? '' :
+    a.sparkle ?
+    `<rect x="-10" y="-24" width="20" height="4" rx="2" fill="url(#rainbow)"/>
+     <circle cx="0" cy="-19" r="2.6" fill="#ffd23f"/>` :
     `<rect x="-10" y="-24" width="20" height="4" rx="2" fill="#e05252"/>
      <circle cx="0" cy="-19" r="2.6" fill="#ffd23f"/>`;
   const harness = a.harness ?
     `<path d="M-13,-13 Q0,-6 13,-13" stroke="${a.harness}" stroke-width="4" fill="none"/>` : '';
   const patch = a.patch ? `<circle cx="7.5" cy="-41" r="6.5" fill="${a.patch}" opacity="0.85"/>` : '';
+  const faceMask = a.faceMask ? `<ellipse cx="0" cy="-33" rx="11" ry="10" fill="${a.belly}"/>` : '';
+  const spots = a.spots ?
+    `<circle cx="-8" cy="-12" r="2.6" fill="${a.spots}"/>
+     <circle cx="5" cy="-8" r="3" fill="${a.spots}"/>
+     <circle cx="9" cy="-43" r="2.6" fill="${a.spots}"/>
+     <circle cx="-7" cy="-46" r="2" fill="${a.spots}"/>
+     <circle cx="1" cy="-15" r="2" fill="${a.spots}"/>` : '';
+  const barrel = a.barrel ?
+    `<g transform="translate(0,-17)"><rect x="-5" y="-4" width="10" height="8" rx="2.5" fill="#8a5a2b"/>
+     <rect x="-5" y="-1.2" width="10" height="2.4" fill="#ffd23f"/></g>` : '';
+  const sparkles = a.sparkle ?
+    `<g class="sparkles" fill="#ffd23f">
+     <path class="spark" d="M-19,-55 L-18,-52.5 L-15.5,-51.5 L-18,-50.5 L-19,-48 L-20,-50.5 L-22.5,-51.5 L-20,-52.5 Z"/>
+     <path class="spark spark-2" d="M17,-62 L18,-59.5 L20.5,-58.5 L18,-57.5 L17,-55 L16,-57.5 L13.5,-58.5 L16,-59.5 Z"/>
+     </g>` : '';
   return `<g class="dog-body" transform="scale(${a.scale})">
-    <ellipse class="dog-shadow" cx="0" cy="1" rx="18" ry="4" fill="rgba(0,0,0,0.15)"/>
-    <path class="tail" d="M11,-8 Q28,-10 26,-28 Q25,-33 19,-30 Q20,-17 9,-13 Z" fill="${a.body}"/>
-    <ellipse cx="0" cy="-10" rx="14" ry="10" fill="${a.body}"/>
-    <ellipse cx="0" cy="-7" rx="8" ry="6" fill="${a.belly}"/>
+    <ellipse class="dog-shadow" cx="0" cy="1" rx="${bodyRx + 4}" ry="4" fill="rgba(0,0,0,0.15)"/>
+    <path class="tail" d="M${bodyRx - 3},-8 Q${bodyRx + 14},-10 ${bodyRx + 12},-28 Q${bodyRx + 11},-33 ${bodyRx + 5},-30 Q${bodyRx + 6},-17 ${bodyRx - 5},-13 Z" fill="${a.body}"/>
+    <ellipse cx="0" cy="-10" rx="${bodyRx}" ry="10" fill="${a.body}"/>
+    <ellipse cx="0" cy="-7" rx="${a.long ? 12 : 8}" ry="6" fill="${a.belly}"/>
     ${harness}
-    <ellipse cx="-6" cy="-1.5" rx="4.5" ry="2.8" fill="${a.body}"/>
-    <ellipse cx="6" cy="-1.5" rx="4.5" ry="2.8" fill="${a.body}"/>
+    <ellipse cx="-${a.long ? 12 : 6}" cy="-1.5" rx="4.5" ry="2.8" fill="${a.body}"/>
+    <ellipse cx="${a.long ? 12 : 6}" cy="-1.5" rx="4.5" ry="2.8" fill="${a.body}"/>
     ${dogEars(a)}
     <circle cx="0" cy="-36" r="17" fill="${a.body}"/>
+    ${faceMask}
     ${patch}
+    ${spots}
     <ellipse cx="0" cy="-29" rx="8" ry="6" fill="${a.belly}"/>
     <ellipse cx="0" cy="-33.5" rx="3" ry="2.4" fill="#3b2b20"/>
     <path d="M0,-31.5 L0,-29.5 M0,-29.5 Q-3,-27.5 -5,-29.2 M0,-29.5 Q3,-27.5 5,-29.2" stroke="#3b2b20" stroke-width="1.2" fill="none" stroke-linecap="round"/>
@@ -81,14 +132,16 @@ function dogSVG(breedId, accessories) {
     <g class="eyes">
       <ellipse cx="-7.5" cy="-40" rx="4.6" ry="5.4" fill="#fff"/>
       <ellipse cx="7.5" cy="-40" rx="4.6" ry="5.4" fill="#fff"/>
-      <circle cx="-6.8" cy="-39.2" r="2.8" fill="#2d2016"/>
-      <circle cx="8.2" cy="-39.2" r="2.8" fill="#2d2016"/>
+      <circle cx="-6.8" cy="-39.2" r="2.8" fill="${a.eyeColor || '#2d2016'}"/>
+      <circle cx="8.2" cy="-39.2" r="2.8" fill="${a.eyeColor || '#2d2016'}"/>
       <circle cx="-5.9" cy="-40.4" r="1.1" fill="#fff"/>
       <circle cx="9.1" cy="-40.4" r="1.1" fill="#fff"/>
       <circle cx="-7.6" cy="-38" r="0.55" fill="#fff"/>
       <circle cx="7.4" cy="-38" r="0.55" fill="#fff"/>
     </g>
     ${collar}
+    ${barrel}
+    ${sparkles}
     ${dogAccessories(acc)}
   </g>`;
 }

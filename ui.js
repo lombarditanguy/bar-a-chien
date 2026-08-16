@@ -31,6 +31,9 @@ const el = {
   btnDogOk: document.getElementById('btn-dog-ok'),
   btnSound: document.getElementById('btn-sound'),
   btnReset: document.getElementById('btn-reset'),
+  questText: document.getElementById('quest-text'),
+  questClaim: document.getElementById('quest-claim'),
+  questReward: document.getElementById('quest-reward'),
 };
 
 // Format lisible pour les enfants : 1234 -> "1,2 k"
@@ -38,7 +41,8 @@ function formatNumber(n) {
   n = Math.floor(n);
   if (n < 1000) return String(n);
   if (n < 1000000) return (n / 1000).toFixed(1).replace('.', ',') + ' k';
-  return (n / 1000000).toFixed(1).replace('.', ',') + ' M';
+  if (n < 1000000000) return (n / 1000000).toFixed(1).replace('.', ',') + ' M';
+  return (n / 1000000000).toFixed(1).replace('.', ',') + ' Md';
 }
 
 function escapeHtml(s) {
@@ -170,6 +174,19 @@ function renderHud() {
 
   el.costExpand.textContent = barIsMaxed() ? 'Maxi !' : '🪙 ' + formatNumber(expandCost());
   el.btnExpand.disabled = barIsMaxed() || state.coins < expandCost();
+
+  // Mission en cours
+  const quest = currentQuest();
+  if (quest) {
+    const progress = Math.min(questProgress(quest), quest.n);
+    el.questText.textContent = '🎯 ' + quest.text + (quest.n > 1 ? ` (${progress}/${quest.n})` : '');
+    el.questReward.textContent = formatNumber(quest.reward);
+    el.questClaim.classList.toggle('hidden', !questDone(quest));
+    el.questText.classList.toggle('quest-done', questDone(quest));
+  } else {
+    el.questText.textContent = '🏆 Toutes les missions accomplies !';
+    el.questClaim.classList.add('hidden');
+  }
 
   // Les popups affichent des prix : on met à jour leur état "achetable" en continu
   if (!el.adoptModal.classList.contains('hidden')) updateBreedButtons();
@@ -356,6 +373,14 @@ function bindUi() {
   el.btnCollect.addEventListener('click', () => {
     playSound('coin');
     el.welcomeBack.classList.add('hidden');
+  });
+
+  el.questClaim.addEventListener('click', (ev) => {
+    const q = claimQuest();
+    if (q) {
+      playSound('unlock');
+      floatText(ev.clientX, ev.clientY - 20, '🎉 +' + formatNumber(q.reward));
+    }
   });
 
   el.btnDogOk.addEventListener('click', closeDogModal);
