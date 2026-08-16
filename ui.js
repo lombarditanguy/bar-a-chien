@@ -116,9 +116,12 @@ function renderSlots() {
     if (dog) {
       g.dataset.dogId = dog.id; // les clients retrouvent le chien par son id
       const nameWidth = dog.name.length * 6 + 26;
+      const ball = dog.accessories.includes('balle') ?
+        `<g transform="translate(19,-3)"><g class="play-ball-move">${playBallSVG()}</g></g>` : '';
       g.innerHTML =
         cushionSVG(dog.accessories.includes('panier')) +
-        `<g class="dog-wrap">${dogSVG(dog.breed, dog.accessories)}</g>` +
+        ball +
+        `<g class="dog-move"><g class="dog-wrap">${dogSVG(dog.breed, dog.accessories)}</g></g>` +
         `<g class="dog-name" transform="translate(0,10)">
           <rect x="${-nameWidth / 2}" y="-8" width="${nameWidth}" height="14" rx="7" fill="rgba(255,255,255,0.9)"/>
           <text x="-4" y="3" text-anchor="middle" font-size="9" font-weight="bold" fill="#4a3728">${escapeHtml(dog.name)}</text>

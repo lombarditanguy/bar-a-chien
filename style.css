@@ -133,14 +133,56 @@ body {
 .spot:nth-child(2n) .dog-wrap { animation-delay: 0.4s; }
 .spot:nth-child(3n) .dog-wrap { animation-delay: 0.8s; }
 
-.dog-wrap.happy {
+.spot .dog-wrap.happy {
   animation: wiggle 0.5s ease-in-out;
 }
 
+/* Bond de joie spontané */
+.spot .dog-wrap.joy {
+  animation: joy-jump 0.9s ease-in-out;
+}
+
+/* La queue remue en permanence, à toute vitesse quand le chien est content */
 .tail {
   transform-box: fill-box;
   transform-origin: bottom left;
-  animation: tail-wag 0.9s ease-in-out infinite;
+  animation: tail-wag 0.5s ease-in-out infinite;
+}
+
+.dog-wrap.happy .tail,
+.dog-wrap.joy .tail,
+.dog-move.running .tail {
+  animation-duration: 0.16s;
+}
+
+/* Langue tirée qui halète */
+.tongue {
+  transform-box: fill-box;
+  transform-origin: top center;
+  animation: pant 0.8s ease-in-out infinite;
+}
+
+/* Les yeux clignent de temps en temps */
+.eyes {
+  transform-box: fill-box;
+  transform-origin: center center;
+  animation: blink 4.4s infinite;
+}
+
+/* Course du chien (aller chercher la balle) */
+.dog-move {
+  transition-property: transform;
+  transition-timing-function: ease-in-out;
+}
+
+.spot .dog-move.running .dog-wrap {
+  animation: run-hop 0.26s linear infinite;
+}
+
+/* La balle roule puis revient dans la gueule du chien */
+.play-ball-move {
+  transition-property: transform;
+  transition-timing-function: ease-out;
 }
 
 /* Les clients : marche (jambes + rebond), position assise */
@@ -464,8 +506,30 @@ body {
 }
 
 @keyframes tail-wag {
-  0%, 100% { transform: rotate(0); }
+  0%, 100% { transform: rotate(-9deg); }
   50% { transform: rotate(16deg); }
+}
+
+@keyframes pant {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.3); }
+}
+
+@keyframes blink {
+  0%, 91%, 100% { transform: scaleY(1); }
+  94% { transform: scaleY(0.08); }
+}
+
+@keyframes joy-jump {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  28% { transform: translateY(-13px) rotate(-6deg); }
+  55% { transform: translateY(0) rotate(0); }
+  78% { transform: translateY(-8px) rotate(5deg); }
+}
+
+@keyframes run-hop {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
 
 @keyframes wiggle {
