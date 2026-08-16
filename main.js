@@ -29,6 +29,9 @@
   // Les chiens jouent de temps en temps (balle, bonds de joie)
   setInterval(dogPlayTick, DOG_PLAY.tickMs);
 
+  // Événements aléatoires (VIP, pluie de pièces, chien perdu)
+  scheduleNextEvent();
+
   // Sauvegarde automatique
   setInterval(saveState, CONFIG.autosaveIntervalMs);
   window.addEventListener('beforeunload', saveState);

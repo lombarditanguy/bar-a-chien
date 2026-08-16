@@ -144,6 +144,7 @@
         <g id="customers-layer"></g>
       </svg>
       <div id="hint" class="hidden">👇 Adopte ton premier chien !</div>
+      <div id="toast" class="hidden"></div>
     </div>
   </main>
 
@@ -196,6 +197,39 @@
     </div>
   </div>
 
+  <!-- Popup chien perdu (événement) -->
+  <div id="stray-modal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-emoji" id="stray-thumb">🐶</div>
+      <p><b>Un chien perdu frappe à la porte !</b><br>Tu veux l'adopter ?</p>
+      <button id="btn-stray-adopt" class="big-btn">Bienvenue chez nous !</button>
+      <button id="btn-stray-no" class="small-btn">Non merci</button>
+    </div>
+  </div>
+
+  <!-- Album de collection -->
+  <div id="album-modal" class="modal hidden">
+    <div class="modal-card">
+      <p class="modal-title">📔 Mon album</p>
+      <div id="album-grid"></div>
+      <p id="album-stats"></p>
+      <button id="btn-album-close" class="small-btn">Fermer</button>
+    </div>
+  </div>
+
+  <!-- Prestige : déménager -->
+  <div id="prestige-modal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-emoji">🚚</div>
+      <p class="modal-title">Déménager !</p>
+      <p id="prestige-text">…</p>
+      <button id="btn-prestige-go" class="big-btn">On déménage !</button>
+      <button id="btn-prestige-close" class="small-btn">Plus tard</button>
+    </div>
+  </div>
+
+  <button id="btn-album" title="Album">📔</button>
+  <button id="btn-prestige" class="hidden" title="Déménager">🏅</button>
   <button id="btn-sound" title="Son">🔊</button>
   <button id="btn-reset" title="Réinitialiser la partie">🔄</button>
 
@@ -208,6 +242,7 @@
   <script src="ui.js"></script>
   <script src="customers.js"></script>
   <script src="dogplay.js"></script>
+  <script src="events.js"></script>
   <script src="main.js"></script>
 </body>
 </html>

@@ -13,12 +13,19 @@ function defaultState() {
       kibbleLevel: 0,
       expandBought: 0,
     },
-    // Compteurs pour les missions
+    // Compteurs pour les missions (remis à zéro au prestige)
+    // et pour l'album / le prestige (adopted, byBreed, totalEarned : à vie)
     stats: {
       pets: 0,
       served: 0,
+      adopted: 0,
+      totalEarned: 0,
+      byBreed: {},
     },
     questIndex: 0,
+    prestige: {
+      medals: 0,
+    },
     settings: {
       sound: true,
     },
@@ -56,6 +63,8 @@ function loadState() {
     state = Object.assign(def, saved);
     state.upgrades = Object.assign(def.upgrades, saved.upgrades);
     state.stats = Object.assign(def.stats, saved.stats);
+    if (typeof state.stats.byBreed !== 'object' || !state.stats.byBreed) state.stats.byBreed = {};
+    state.prestige = Object.assign(def.prestige, saved.prestige);
     state.settings = Object.assign(def.settings, saved.settings);
     state.boosts = Object.assign(def.boosts, saved.boosts);
     migrateSave();

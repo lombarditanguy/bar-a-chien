@@ -85,14 +85,14 @@ function tableDrinkSlot(tableIndex) {
   return table && table.querySelector('.drink-slot');
 }
 
-async function spawnCustomer(spend) {
+async function spawnCustomer(spend, opts) {
   const c = CONFIG.customers;
   const dog = state.dogs[Math.floor(Math.random() * state.dogs.length)];
   if (!dog) return;
 
   const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  g.setAttribute('class', 'customer');
-  g.innerHTML = personSVG() + '<g class="bubble hidden" transform="translate(0,-52)"></g>';
+  g.setAttribute('class', 'customer' + (opts && opts.vip ? ' vip' : ''));
+  g.innerHTML = personSVG(opts) + '<g class="bubble hidden" transform="translate(0,-52)"></g>';
   setPos(g, DOOR_SPOT.x, DOOR_SPOT.y, true);
   customersLayer.appendChild(g);
   void g.getBoundingClientRect(); // fige la position de départ avant la marche

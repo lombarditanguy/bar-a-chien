@@ -291,6 +291,47 @@ body {
 
 #hint.hidden { display: none; }
 
+/* Bandeau d'annonce des événements */
+#toast {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border: 3px solid var(--coin);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
+  z-index: 6;
+  animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#toast.hidden { display: none; }
+
+/* Pièces qui tombent pendant la pluie de pièces */
+.rain-coin {
+  position: absolute;
+  top: -30px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffe89a 0%, var(--coin) 55%, #e0a800 100%);
+  border: 2.5px solid #c79400;
+  cursor: pointer;
+  z-index: 7;
+  animation-name: rain-fall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+/* Le client VIP brille */
+.customer.vip {
+  filter: drop-shadow(0 0 4px rgba(255, 210, 63, 0.9));
+}
+
 /* ---- Boutique ---- */
 
 #shop {
@@ -550,6 +591,65 @@ body {
 #btn-reset { right: 12px; }
 #btn-sound { right: 56px; }
 
+#btn-album, #btn-prestige {
+  position: fixed;
+  top: 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 999px;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+#btn-album { left: 12px; }
+#btn-prestige { left: 56px; }
+#btn-prestige.hidden { display: none; }
+
+/* ---- Album ---- */
+
+#album-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  max-height: 45vh;
+  overflow-y: auto;
+}
+
+.album-card {
+  background: #fffaf2;
+  border: 2px solid var(--grass);
+  border-radius: 12px;
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.7rem;
+  line-height: 1.2;
+}
+
+.album-card small { color: #9a8570; }
+
+.album-card.unknown svg {
+  filter: grayscale(1) brightness(0.4) opacity(0.5);
+}
+
+#album-stats {
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+#prestige-text {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
 /* ---- Animations ---- */
 
 @keyframes dog-idle {
@@ -613,6 +713,11 @@ body {
 @keyframes hint-bounce {
   0%, 100% { transform: translate(-50%, -50%); }
   50% { transform: translate(-50%, -60%); }
+}
+
+@keyframes rain-fall {
+  from { top: -30px; }
+  to { top: 102%; }
 }
 
 @keyframes claim-pulse {

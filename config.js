@@ -100,6 +100,25 @@ const CONFIG = {
     walkMsPerUnit: 9, // vitesse de marche (ms par unité SVG parcourue)
   },
 
+  // Événements aléatoires (client VIP, pluie de pièces, chien perdu)
+  events: {
+    minDelaySec: 45,
+    maxDelaySec: 100,
+    vipMult: 10,          // un VIP paie 10x un client normal
+    rain: {
+      durationMs: 6000,   // durée de la pluie de pièces
+      spawnEveryMs: 320,  // une pièce toutes les X ms
+      fallMs: 2600,       // temps de chute d'une pièce
+    },
+  },
+
+  // Prestige : déménager remet à zéro mais donne des médailles permanentes.
+  // médailles totales = racine carrée (pièces gagnées en tout / earnedPerMedal)
+  prestige: {
+    earnedPerMedal: 50000,
+    bonusPerMedal: 0.1,   // +10% de revenus par médaille, pour toujours
+  },
+
   // Gains hors-ligne : 50% du revenu normal, plafonnés à 8h
   offline: { rate: 0.5, maxSeconds: 8 * 3600 },
 

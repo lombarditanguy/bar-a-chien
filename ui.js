@@ -34,6 +34,20 @@ const el = {
   questText: document.getElementById('quest-text'),
   questClaim: document.getElementById('quest-claim'),
   questReward: document.getElementById('quest-reward'),
+  strayModal: document.getElementById('stray-modal'),
+  strayThumb: document.getElementById('stray-thumb'),
+  btnStrayAdopt: document.getElementById('btn-stray-adopt'),
+  btnStrayNo: document.getElementById('btn-stray-no'),
+  albumModal: document.getElementById('album-modal'),
+  albumGrid: document.getElementById('album-grid'),
+  albumStats: document.getElementById('album-stats'),
+  btnAlbum: document.getElementById('btn-album'),
+  btnAlbumClose: document.getElementById('btn-album-close'),
+  prestigeModal: document.getElementById('prestige-modal'),
+  prestigeText: document.getElementById('prestige-text'),
+  btnPrestige: document.getElementById('btn-prestige'),
+  btnPrestigeGo: document.getElementById('btn-prestige-go'),
+  btnPrestigeClose: document.getElementById('btn-prestige-close'),
 };
 
 // Format lisible pour les enfants : 1234 -> "1,2 k"
@@ -174,6 +188,11 @@ function renderHud() {
 
   el.costExpand.textContent = barIsMaxed() ? 'Maxi !' : '🪙 ' + formatNumber(expandCost());
   el.btnExpand.disabled = barIsMaxed() || state.coins < expandCost();
+
+  // Bouton prestige : visible dès qu'il y a des médailles à gagner (ou déjà gagnées)
+  const gainable = medalsGainable();
+  el.btnPrestige.classList.toggle('hidden', gainable < 1 && state.prestige.medals === 0);
+  el.btnPrestige.textContent = gainable >= 1 ? '🚚❗' : '🏅' + state.prestige.medals;
 
   // Mission en cours
   const quest = currentQuest();
@@ -348,6 +367,51 @@ function showWelcomeBack(amount) {
   el.welcomeBack.classList.remove('hidden');
 }
 
+// ---- Album de collection ----
+
+function openAlbum() {
+  el.albumGrid.innerHTML = '';
+  CONFIG.breeds.forEach(breed => {
+    const count = state.stats.byBreed[breed.id] || 0;
+    const known = breedIsUnlocked(breed.id) || count > 0;
+    const card = document.createElement('div');
+    card.className = 'album-card' + (known ? '' : ' unknown');
+    card.innerHTML =
+      dogThumb(breed.id, 40) +
+      '<b>' + (known ? breed.name : '???') + '</b>' +
+      '<small>' + (count > 0 ? '×' + count + ' adopté' + (count > 1 ? 's' : '') : (known ? 'jamais adopté' : 'à découvrir')) + '</small>';
+    el.albumGrid.appendChild(card);
+  });
+  el.albumStats.innerHTML =
+    '🐶 ' + state.stats.adopted + ' adoptions en tout<br>' +
+    '🪙 ' + formatNumber(state.stats.totalEarned) + ' pièces gagnées en tout<br>' +
+    '🏅 ' + state.prestige.medals + ' médaille' + (state.prestige.medals > 1 ? 's' : '') +
+    (state.prestige.medals > 0 ? ' (+' + Math.round(state.prestige.medals * CONFIG.prestige.bonusPerMedal * 100) + '% de revenus)' : '');
+  el.albumModal.classList.remove('hidden');
+}
+
+// ---- Prestige (déménagement) ----
+
+function openPrestigeModal() {
+  const gain = medalsGainable();
+  const bonusPct = Math.round(CONFIG.prestige.bonusPerMedal * 100);
+  if (gain >= 1) {
+    el.prestigeText.innerHTML =
+      'Ton bar a du succès ! Tu peux déménager dans un nouveau bar : ' +
+      'tu repars de zéro, mais tu gagnes <b>' + gain + ' médaille' + (gain > 1 ? 's' : '') + ' 🏅</b>.<br><br>' +
+      'Chaque médaille donne <b>+' + bonusPct + '% de revenus pour toujours</b>.<br>' +
+      'Tu as déjà ' + state.prestige.medals + ' médaille' + (state.prestige.medals > 1 ? 's' : '') + '.';
+    el.btnPrestigeGo.classList.remove('hidden');
+  } else {
+    el.prestigeText.innerHTML =
+      'Tu as <b>' + state.prestige.medals + ' médaille' + (state.prestige.medals > 1 ? 's' : '') + ' 🏅</b> ' +
+      '(+' + Math.round(state.prestige.medals * bonusPct) + '% de revenus).<br><br>' +
+      'Gagne encore des pièces pour pouvoir déménager à nouveau !';
+    el.btnPrestigeGo.classList.add('hidden');
+  }
+  el.prestigeModal.classList.remove('hidden');
+}
+
 function renderSoundButton() {
   el.btnSound.textContent = state.settings.sound ? '🔊' : '🔇';
 }
@@ -380,6 +444,36 @@ function bindUi() {
     if (q) {
       playSound('unlock');
       floatText(ev.clientX, ev.clientY - 20, '🎉 +' + formatNumber(q.reward));
+    }
+  });
+
+  // Chien perdu (événement)
+  el.btnStrayAdopt.addEventListener('click', () => {
+    const dog = adoptStray(strayBreedId);
+    el.strayModal.classList.add('hidden');
+    if (dog) {
+      playSound('unlock');
+      render();
+      openDogModal(dog, true);
+    }
+  });
+  el.btnStrayNo.addEventListener('click', () => el.strayModal.classList.add('hidden'));
+
+  // Album
+  el.btnAlbum.addEventListener('click', openAlbum);
+  el.btnAlbumClose.addEventListener('click', () => el.albumModal.classList.add('hidden'));
+
+  // Prestige
+  el.btnPrestige.addEventListener('click', openPrestigeModal);
+  el.btnPrestigeClose.addEventListener('click', () => el.prestigeModal.classList.add('hidden'));
+  el.btnPrestigeGo.addEventListener('click', () => {
+    const gain = doPrestige();
+    el.prestigeModal.classList.add('hidden');
+    if (gain > 0) {
+      playSound('unlock');
+      lastSlotsSignature = '';
+      render();
+      showToast('🏅 +' + gain + ' médaille' + (gain > 1 ? 's' : '') + ' ! Nouveau bar !');
     }
   });
 

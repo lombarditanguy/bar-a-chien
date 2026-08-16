@@ -171,11 +171,17 @@ function randomOf(list) {
   return list[Math.floor(Math.random() * list.length)];
 }
 
-// Un petit personnage debout, jambes animables (classe .leg)
-function personSVG() {
+// Un petit personnage debout, jambes animables (classe .leg).
+// opts.vip : couronne dorée + tenue dorée
+function personSVG(opts) {
+  const vip = opts && opts.vip;
   const skin = randomOf(PEOPLE_ART.skins);
   const hair = randomOf(PEOPLE_ART.hairs);
-  const shirt = randomOf(PEOPLE_ART.shirts);
+  const shirt = vip ? '#ffd23f' : randomOf(PEOPLE_ART.shirts);
+  const crown = vip ?
+    `<path d="M-7,-50 L-5.5,-56 L-2.5,-51.5 L0,-57 L2.5,-51.5 L5.5,-56 L7,-50 Z"
+       fill="#ffd23f" stroke="#c79400" stroke-width="0.9"/>
+     <circle cx="0" cy="-57.5" r="1.2" fill="#ff5f8f"/>` : '';
   return `<g class="walker">
     <ellipse class="person-shadow" cx="0" cy="1" rx="10" ry="2.6" fill="rgba(0,0,0,0.15)"/>
     <g class="legs">
@@ -190,6 +196,7 @@ function personSVG() {
     <circle cx="-3.5" cy="-41" r="1.4" fill="#3b2b20"/>
     <circle cx="3.5" cy="-41" r="1.4" fill="#3b2b20"/>
     <path d="M-3,-37 Q0,-34.5 3,-37" stroke="#3b2b20" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+    ${crown}
     <g class="hand-drink"></g>
   </g>`;
 }

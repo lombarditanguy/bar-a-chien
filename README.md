@@ -27,6 +27,13 @@ Le revenu moyen affiché « +N /s » = fréquence des clients × ce qu'ils paien
   (+75 %). Tous dessinés sur le chien.
 - **Missions** : objectifs successifs (adopter, caresser, servir des clients,
   débloquer des races…) avec récompenses à réclamer — toujours un prochain but.
+- **Événements aléatoires** (toutes les ~1-2 min) : client VIP 👑 qui paie ×10,
+  pluie de pièces à attraper avant qu'elles tombent, chien perdu qui frappe à
+  la porte (adoption gratuite).
+- **Prestige** 🚚 : « déménager » remet la partie à zéro contre des médailles 🏅
+  permanentes (+10 % de revenus chacune, médailles = √(pièces gagnées à vie / 50k)).
+- **Album** 📔 : collection des 11 races (silhouettes mystère tant qu'elles ne
+  sont pas découvertes), compteurs d'adoptions à vie, total gagné, médailles.
 - **Croquettes** : +1 pièce/s de base par chien à chaque niveau (multiplié
   par la race et les accessoires).
 - **Agrandir** : +2 emplacements (max 20).

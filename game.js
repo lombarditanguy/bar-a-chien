@@ -39,9 +39,20 @@ function attraction() {
   return state.dogs.reduce((sum, dog) => sum + dogCharm(dog), 0);
 }
 
-// Revenu moyen généré par un chien : base × son charme
+// Bonus permanent gagné par le prestige (+10% par médaille)
+function prestigeMultiplier() {
+  return 1 + state.prestige.medals * CONFIG.prestige.bonusPerMedal;
+}
+
+// Revenu moyen généré par un chien : base × son charme × bonus de prestige
 function dogIncome(dog) {
-  return baseIncomePerDog() * dogCharm(dog);
+  return baseIncomePerDog() * dogCharm(dog) * prestigeMultiplier();
+}
+
+// Toute pièce gagnée passe par ici (compte pour les médailles de prestige)
+function earnCoins(amount) {
+  state.coins += amount;
+  state.stats.totalEarned += amount;
 }
 
 function totalIncomePerSecond() {
@@ -97,6 +108,16 @@ function adoptDog(breedId) {
   const cost = adoptCost(breedId);
   if (barIsFull() || !breedIsUnlocked(breedId) || state.coins < cost) return null;
   state.coins -= cost;
+  return pushNewDog(breedId);
+}
+
+// Adoption gratuite (événement "chien perdu")
+function adoptStray(breedId) {
+  if (barIsFull() || !breedIsUnlocked(breedId)) return null;
+  return pushNewDog(breedId);
+}
+
+function pushNewDog(breedId) {
   const dog = {
     id: state.nextDogId++,
     name: CONFIG.defaultNames[Math.floor(Math.random() * CONFIG.defaultNames.length)],
@@ -104,6 +125,8 @@ function adoptDog(breedId) {
     accessories: [],
   };
   state.dogs.push(dog);
+  state.stats.adopted++;
+  state.stats.byBreed[breedId] = (state.stats.byBreed[breedId] || 0) + 1;
   saveState();
   return dog;
 }
@@ -142,7 +165,7 @@ function buyExpand() {
 }
 
 function petDog() {
-  state.coins += CONFIG.petReward;
+  earnCoins(CONFIG.petReward);
   state.stats.pets++;
 }
 
@@ -182,8 +205,34 @@ function advanceCustomers(dt) {
 }
 
 function payCustomer(amount) {
-  state.coins += amount;
+  earnCoins(amount);
   state.stats.served++;
+}
+
+// ---- Prestige (déménagement) ----
+
+function medalsGainable() {
+  const total = Math.floor(Math.sqrt(state.stats.totalEarned / CONFIG.prestige.earnedPerMedal));
+  return Math.max(0, total - state.prestige.medals);
+}
+
+// Recommence dans un nouveau bar : tout est remis à zéro sauf les médailles,
+// l'album (adoptions à vie) et le total gagné. Renvoie les médailles gagnées.
+function doPrestige() {
+  const gain = medalsGainable();
+  if (gain <= 0) return 0;
+  state.prestige.medals += gain;
+  state.coins = CONFIG.startCoins;
+  state.slots = CONFIG.startSlots;
+  state.dogs = [];
+  state.unlockedBreeds = ['chiot'];
+  state.upgrades = { kibbleLevel: 0, expandBought: 0 };
+  state.stats.pets = 0;
+  state.stats.served = 0;
+  state.questIndex = 0;
+  state.nextDogId = 1;
+  saveState();
+  return gain;
 }
 
 // ---- Missions ----
@@ -213,7 +262,7 @@ function questDone(q) {
 function claimQuest() {
   const q = currentQuest();
   if (!q || !questDone(q)) return null;
-  state.coins += q.reward;
+  earnCoins(q.reward);
   state.questIndex++;
   saveState();
   return q;
@@ -229,6 +278,6 @@ function computeOfflineGains() {
   if (elapsedSec < 30 || state.dogs.length === 0) return 0; // absence trop courte : on ignore
   const perSecond = state.dogs.reduce((sum, dog) => sum + dogIncome(dog), 0);
   const gained = Math.floor(perSecond * elapsedSec * CONFIG.offline.rate);
-  state.coins += gained;
+  earnCoins(gained);
   return gained;
 }
