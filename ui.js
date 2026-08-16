@@ -5,7 +5,9 @@
 const el = {
   coinCount: document.getElementById('coin-count'),
   incomeRate: document.getElementById('income-rate'),
-  slots: document.getElementById('slots'),
+  cushions: document.getElementById('cushions'),
+  decor: document.getElementById('decor'),
+  hint: document.getElementById('hint'),
   btnAdopt: document.getElementById('btn-adopt'),
   btnKibble: document.getElementById('btn-kibble'),
   btnExpand: document.getElementById('btn-expand'),
@@ -43,11 +45,21 @@ function escapeHtml(s) {
   return div.innerHTML;
 }
 
-// ---- Rendu des emplacements / chiens ----
-// On ne reconstruit la grille que quand sa composition change (perf + les
+// ---- Rendu de la scène : coussins et chiens placés dans le bar ----
+// On ne reconstruit que quand la composition change (perf + les
 // animations CSS ne sont pas réinitialisées à chaque frame).
 
 let lastSlotsSignature = '';
+
+// Position (en %) du coussin n° i dans la scène : rangées de 4
+function spotPosition(i) {
+  const col = i % 4;
+  const row = Math.floor(i / 4);
+  return {
+    x: 13 + col * 21 + (row % 2 === 1 ? 8 : 0), // rangées décalées, plus naturel
+    y: 42 + row * 12,
+  };
+}
 
 function renderSlots() {
   const signature = state.slots + '|' +
@@ -55,23 +67,33 @@ function renderSlots() {
   if (signature === lastSlotsSignature) return;
   lastSlotsSignature = signature;
 
-  el.slots.innerHTML = '';
+  el.cushions.innerHTML = '';
   for (let i = 0; i < state.slots; i++) {
     const dog = state.dogs[i];
-    const slot = document.createElement('div');
-    slot.className = 'slot' + (dog ? ' filled' : ' empty');
+    const pos = spotPosition(i);
+    const spot = document.createElement('div');
+    spot.className = 'spot' + (dog ? ' has-dog' : ' empty');
+    spot.style.left = pos.x + '%';
+    spot.style.top = pos.y + '%';
     if (dog) {
       const accEmojis = dog.accessories.map(id => (getAccessory(id) || {}).emoji || '').join('');
-      slot.innerHTML =
+      spot.innerHTML =
         '<div class="dog-emoji">' + getBreed(dog.breed).emoji + '</div>' +
         (accEmojis ? '<div class="dog-accs">' + accEmojis + '</div>' : '') +
+        '<div class="cushion"></div>' +
         '<div class="dog-name">' + escapeHtml(dog.name) + ' <span class="pencil">✏️</span></div>';
-      slot.addEventListener('click', (ev) => onDogClick(ev, dog));
+      spot.addEventListener('click', (ev) => onDogClick(ev, dog));
     } else {
-      slot.innerHTML = '<div class="bone">🦴</div>';
+      spot.innerHTML = '<div class="bone">🦴</div><div class="cushion"></div>';
     }
-    el.slots.appendChild(slot);
+    el.cushions.appendChild(spot);
   }
+
+  // Une plante décorative par agrandissement acheté : le bar s'embellit
+  el.decor.textContent = '🪴'.repeat(Math.min(state.upgrades.expandBought, 4));
+
+  // Indice de démarrage quand le bar est vide
+  el.hint.classList.toggle('hidden', state.dogs.length > 0);
 }
 
 // ---- Rafraîchissement des compteurs et boutons (à chaque frame) ----
@@ -111,15 +133,6 @@ function floatText(x, y, text) {
   f.style.top = y + 'px';
   document.body.appendChild(f);
   setTimeout(() => f.remove(), 900);
-}
-
-// Pièce décorative qui s'envole d'un chien au hasard (appelé par main.js)
-function ambientCoin() {
-  const filled = el.slots.querySelectorAll('.slot.filled');
-  if (filled.length === 0 || document.hidden) return;
-  const slot = filled[Math.floor(Math.random() * filled.length)];
-  const rect = slot.getBoundingClientRect();
-  floatText(rect.left + rect.width / 2, rect.top, '🪙');
 }
 
 // ---- Popup d'adoption (choix de race) ----

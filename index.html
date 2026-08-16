@@ -17,10 +17,19 @@
     <div class="income-box" id="income-rate">+0 /s</div>
   </header>
 
-  <!-- Le bar : grille d'emplacements pour chiens -->
+  <!-- La scène du bar : mur, comptoir, porte, coussins, clients -->
   <main id="bar">
-    <h1 id="bar-title">🐾 Mon Bar à Chiens 🐾</h1>
-    <div id="slots"></div>
+    <div id="scene">
+      <div id="bar-title">🐾 Bar à Chiens 🐾</div>
+      <div id="decor"></div>
+      <div id="counter">
+        <span id="barman">🧑‍🍳</span>
+        <span class="counter-drinks">🍹🥤🧋</span>
+      </div>
+      <div id="door">🚪</div>
+      <div id="cushions"></div>
+      <div id="hint" class="hidden">👇 Adopte ton premier chien !</div>
+    </div>
   </main>
 
   <!-- Boutique en bas : gros boutons, peu de texte -->
@@ -46,7 +55,7 @@
   <div id="welcome-back" class="modal hidden">
     <div class="modal-card">
       <div class="modal-emoji">🐕💤</div>
-      <p>Tes chiens ont travaillé pendant ton absence !</p>
+      <p>Des clients sont passés pendant ton absence !</p>
       <p class="modal-coins">+<span id="offline-coins">0</span> 🪙</p>
       <button id="btn-collect" class="big-btn">Récupérer !</button>
     </div>
@@ -66,7 +75,7 @@
     <div class="modal-card">
       <div class="modal-emoji" id="dog-modal-emoji">🐶</div>
       <input id="name-input" type="text" maxlength="14" autocomplete="off">
-      <p class="dog-income-line">🪙 <span id="dog-modal-income">0</span> /s</p>
+      <p class="dog-income-line">✨ attire <span id="dog-modal-income">0</span> 🪙 /s</p>
       <div id="acc-list"></div>
       <button id="btn-dog-ok" class="big-btn">Super !</button>
     </div>
@@ -81,6 +90,7 @@
   <script src="game.js"></script>
   <script src="audio.js"></script>
   <script src="ui.js"></script>
+  <script src="customers.js"></script>
   <script src="main.js"></script>
 </body>
 </html>

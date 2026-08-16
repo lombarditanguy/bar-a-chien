@@ -22,13 +22,26 @@ function baseIncomePerDog() {
     state.upgrades.kibbleLevel * CONFIG.upgrades.kibble.incomePerLevel;
 }
 
-// Revenu d'un chien précis : base × race × (1 + bonus des accessoires)
-function dogIncome(dog) {
-  const accBonus = dog.accessories.reduce((sum, id) => {
+function accBonus(dog) {
+  return dog.accessories.reduce((sum, id) => {
     const acc = getAccessory(id);
     return sum + (acc ? acc.incomeBonus : 0);
   }, 0);
-  return baseIncomePerDog() * getBreed(dog.breed).mult * (1 + accBonus);
+}
+
+// "Charme" d'un chien : race × accessoires. C'est ce qui attire les clients.
+function dogCharm(dog) {
+  return getBreed(dog.breed).mult * (1 + accBonus(dog));
+}
+
+// Charme total du bar
+function attraction() {
+  return state.dogs.reduce((sum, dog) => sum + dogCharm(dog), 0);
+}
+
+// Revenu moyen généré par un chien : base × son charme
+function dogIncome(dog) {
+  return baseIncomePerDog() * dogCharm(dog);
 }
 
 function totalIncomePerSecond() {
@@ -140,11 +153,35 @@ function renameDog(dogId, newName) {
   }
 }
 
-// ---- Boucle de jeu ----
+// ---- Clients ----
+// L'argent vient des clients : ils arrivent d'autant plus vite que le bar
+// est attirant, et chaque client paie (revenu moyen × intervalle), pour que
+// le revenu moyen corresponde exactement à l'affichage "+N /s".
 
-// dt en secondes
-function tick(dt) {
-  state.coins += totalIncomePerSecond() * dt;
+function customerInterval() {
+  const c = CONFIG.customers;
+  return Math.max(c.minIntervalSec, Math.min(c.maxIntervalSec, 10 / (0.6 + 0.4 * attraction())));
+}
+
+// Ce que paie un client qui arrive maintenant
+function customerSpend() {
+  return totalIncomePerSecond() * customerInterval();
+}
+
+let customerTimer = 0;
+
+// Avance le temps ; renvoie le montant payé par le client qui entre, ou 0.
+// (le crédit des pièces est fait par l'UI au moment où le client paie)
+function advanceCustomers(dt) {
+  if (state.dogs.length === 0) { customerTimer = 0; return 0; }
+  customerTimer += dt;
+  if (customerTimer < customerInterval()) return 0;
+  customerTimer = 0;
+  return customerSpend();
+}
+
+function payCustomer(amount) {
+  state.coins += amount;
 }
 
 // Gains accumulés pendant l'absence du joueur (calculés au chargement).

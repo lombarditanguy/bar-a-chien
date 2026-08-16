@@ -53,11 +53,19 @@ const CONFIG = {
   // Caresser un chien (tap) donne un petit bonus immédiat
   petReward: 1,
 
+  // Clients : plus les chiens sont nombreux/mignons (attraction), plus
+  // ils arrivent vite. Intervalle entre deux clients, en secondes.
+  customers: {
+    maxIntervalSec: 10,   // avec 1 petit chien
+    minIntervalSec: 2.2,  // rythme maxi, ensuite chaque client paie plus
+    emojis: ['🧒', '👧', '👦', '👩', '🧔', '👨‍🦰', '👱‍♀️', '👵', '👴', '👩‍🦱'],
+    drinks: ['🥤', '🧃', '🧋', '🍹', '☕', '🍫'],
+    walkMs: 1600,   // temps pour entrer / sortir
+    drinkMs: 2600,  // temps assis avant de payer
+  },
+
   // Gains hors-ligne : 50% du revenu normal, plafonnés à 8h
   offline: { rate: 0.5, maxSeconds: 8 * 3600 },
-
-  // Pièce décorative qui s'envole d'un chien au hasard toutes les X ms
-  ambientCoinIntervalMs: 3500,
 
   autosaveIntervalMs: 5000,
 };

@@ -10,7 +10,13 @@ Sur mobile : le jeu est responsive, testable via le navigateur du téléphone.
 
 ## Boucle de jeu
 
-- Chaque chien génère automatiquement des pièces par seconde.
+Le bar est une scène vivante : des **clients** entrent par la porte,
+s'installent près d'un chien, commandent une boisson, **paient** (pièce animée
+vers le compteur) et repartent. Plus le bar a de chiens — et plus ils sont
+« charmants » (races rares, accessoires) — plus les clients arrivent vite.
+Le revenu moyen affiché « +N /s » = fréquence des clients × ce qu'ils paient.
+
+- L'argent vient des clients attirés par les chiens.
 - **Adopter** : ouvre le choix des races. 5 races avec des revenus croissants
   (×1 à ×16) ; les races avancées se débloquent avec des pièces (🔒), puis
   chaque adoption a un coût croissant. On nomme le chien à l'adoption.
@@ -35,7 +41,8 @@ Sur mobile : le jeu est responsive, testable via le navigateur du téléphone.
 | `state.js` | État de la partie + sauvegarde/chargement `localStorage` + migration des vieilles sauvegardes. |
 | `game.js` | Logique pure (revenus, coûts, actions, tick, gains hors-ligne) — zéro DOM. |
 | `audio.js` | Petits sons synthétisés (WebAudio). |
-| `ui.js` | Rendu DOM, popups (adoption, fiche chien), effets visuels. |
+| `ui.js` | Rendu DOM (scène, coussins, chiens), popups, effets visuels. |
+| `customers.js` | Clients animés : entrée, commande, paiement, sortie. |
 | `main.js` | Démarrage + boucle de jeu (`requestAnimationFrame`) + autosauvegarde. |
 | `style.css` | Style cartoon (placeholder emoji en attendant de vrais assets). |
 
