@@ -17,17 +17,118 @@
     <div class="income-box" id="income-rate">+0 /s</div>
   </header>
 
-  <!-- La scène du bar : mur, comptoir, porte, coussins, clients -->
+  <!-- La scène du bar : tout est dessiné en SVG (aucune image externe) -->
   <main id="bar">
     <div id="scene">
-      <div id="bar-title">🐾 Bar à Chiens 🐾</div>
-      <div id="decor"></div>
-      <div id="counter">
-        <span id="barman">🧑‍🍳</span>
-        <span class="counter-drinks">🍹🥤🧋</span>
-      </div>
-      <div id="door">🚪</div>
-      <div id="cushions"></div>
+      <svg id="scene-svg" viewBox="0 0 360 560" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <!-- Papier peint rayé du mur -->
+          <pattern id="wallpaper" width="28" height="28" patternUnits="userSpaceOnUse">
+            <rect width="28" height="28" fill="#ffe4ee"/>
+            <rect width="14" height="28" fill="#ffdbe9"/>
+          </pattern>
+          <!-- Plancher en bois -->
+          <pattern id="planks" width="64" height="26" patternUnits="userSpaceOnUse">
+            <rect width="64" height="26" fill="#e2ab6f"/>
+            <rect y="24" width="64" height="2" fill="#c8955c"/>
+            <rect x="31" width="2" height="12" fill="#c8955c"/>
+            <rect x="7" y="12" width="2" height="12" fill="#c8955c"/>
+          </pattern>
+        </defs>
+
+        <!-- Mur et sol -->
+        <rect x="0" y="0" width="360" height="176" fill="url(#wallpaper)"/>
+        <rect x="0" y="170" width="360" height="390" fill="url(#planks)"/>
+        <rect x="0" y="168" width="360" height="7" rx="3" fill="#b5651d"/>
+
+        <!-- Tapis central -->
+        <ellipse cx="180" cy="360" rx="152" ry="112" fill="#f7d9a8"/>
+        <ellipse cx="180" cy="360" rx="138" ry="100" fill="#fbe7c2"/>
+
+        <!-- Enseigne suspendue -->
+        <line x1="130" y1="0" x2="136" y2="10" stroke="#8a5a2b" stroke-width="2"/>
+        <line x1="230" y1="0" x2="224" y2="10" stroke="#8a5a2b" stroke-width="2"/>
+        <rect x="98" y="8" width="164" height="26" rx="8" fill="#c8955c" stroke="#8a5a2b" stroke-width="2.5"/>
+        <text x="180" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#4a2f14">🐾 Bar à Chiens 🐾</text>
+
+        <!-- Étagère à boissons -->
+        <rect x="18" y="62" width="112" height="6" rx="3" fill="#a9743c"/>
+        <g transform="translate(34,62)">
+          <rect x="-5" y="-18" width="10" height="18" rx="3" fill="#f3a35c"/><rect x="-2" y="-22" width="4" height="5" fill="#c96f3b"/>
+        </g>
+        <g transform="translate(58,62)">
+          <rect x="-5" y="-15" width="10" height="15" rx="3" fill="#8ecf4d"/><rect x="-2" y="-19" width="4" height="5" fill="#5da354"/>
+        </g>
+        <g transform="translate(82,62)">
+          <rect x="-5" y="-20" width="10" height="20" rx="3" fill="#ff8fab"/><rect x="-2" y="-24" width="4" height="5" fill="#e05252"/>
+        </g>
+        <g transform="translate(106,62)">
+          <rect x="-5" y="-16" width="10" height="16" rx="3" fill="#6fb7e8"/><rect x="-2" y="-20" width="4" height="5" fill="#3b7bb8"/>
+        </g>
+
+        <!-- Fenêtre à rideaux -->
+        <rect x="150" y="42" width="100" height="66" rx="8" fill="#fff"/>
+        <rect x="155" y="47" width="90" height="56" rx="5" fill="#bfe6ff"/>
+        <circle cx="230" cy="62" r="8" fill="#ffd23f"/>
+        <ellipse cx="180" cy="72" rx="13" ry="5" fill="#fff"/>
+        <ellipse cx="192" cy="66" rx="10" ry="4.5" fill="#fff"/>
+        <line x1="200" y1="47" x2="200" y2="103" stroke="#fff" stroke-width="3"/>
+        <line x1="155" y1="75" x2="245" y2="75" stroke="#fff" stroke-width="3"/>
+        <path d="M150,42 Q162,70 152,108 L150,108 Z" fill="#ff8fab"/>
+        <path d="M250,42 Q238,70 248,108 L250,108 Z" fill="#ff8fab"/>
+        <rect x="146" y="38" width="108" height="9" rx="4.5" fill="#e07092"/>
+
+        <!-- Cadre photo -->
+        <rect x="262" y="48" width="30" height="30" rx="4" fill="#c8955c" stroke="#8a5a2b" stroke-width="2"/>
+        <rect x="267" y="53" width="20" height="20" rx="2" fill="#fbe7c2"/>
+        <circle cx="277" cy="61" r="4.5" fill="#b57f45"/>
+        <ellipse cx="277" cy="68" rx="5" ry="3.5" fill="#b57f45"/>
+
+        <!-- Plantes gagnées avec les agrandissements -->
+        <g id="decor"></g>
+
+        <!-- Comptoir avec serveur et machine à café -->
+        <g id="barman" transform="translate(52,120)">
+          <circle cx="0" cy="-16" r="11" fill="#f1c27d"/>
+          <path d="M-11,-18 A11,11 0 0 1 11,-18 L11,-16 Q0,-23 -11,-16 Z" fill="#6b4423"/>
+          <rect x="-9" y="-34" width="18" height="10" rx="3" fill="#fff"/>
+          <ellipse cx="0" cy="-34" rx="10" ry="4" fill="#fff"/>
+          <circle cx="-4" cy="-15" r="1.5" fill="#3b2b20"/>
+          <circle cx="4" cy="-15" r="1.5" fill="#3b2b20"/>
+          <path d="M-3.5,-11 Q0,-8 3.5,-11" stroke="#3b2b20" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+          <rect x="-12" y="-5" width="24" height="18" rx="6" fill="#6fb7e8"/>
+          <rect x="-8" y="-3" width="16" height="16" rx="3" fill="#fff"/>
+        </g>
+        <g transform="translate(118,132)">
+          <rect x="-16" y="-26" width="32" height="26" rx="4" fill="#7c8a99"/>
+          <rect x="-12" y="-22" width="24" height="8" rx="2" fill="#aebccb"/>
+          <circle cx="-6" cy="-9" r="2.5" fill="#e05252"/>
+          <circle cx="3" cy="-9" r="2.5" fill="#8ecf4d"/>
+          <rect x="8" y="-11" width="5" height="5" rx="1" fill="#2d3238"/>
+        </g>
+        <rect x="10" y="132" width="140" height="14" rx="6" fill="#e0b077"/>
+        <rect x="14" y="144" width="132" height="44" rx="4" fill="#c8955c"/>
+        <rect x="14" y="144" width="132" height="6" fill="#a9743c"/>
+        <path d="M30,156 L30,182 M62,156 L62,182 M94,156 L94,182 M126,156 L126,182" stroke="#a9743c" stroke-width="3"/>
+        <ellipse cx="46" cy="128" rx="6" ry="2.4" fill="#fff"/>
+        <path d="M42,120 L50,120 L49,128 L43,128 Z" fill="#f3a35c"/>
+
+        <!-- Porte d'entrée (le battant s'ouvre) -->
+        <g id="door" transform="translate(298,60)">
+          <rect x="-4" y="-4" width="60" height="132" rx="6" fill="#8a5a2b"/>
+          <g class="door-panel">
+            <rect x="0" y="0" width="52" height="126" rx="4" fill="#c8955c"/>
+            <circle cx="26" cy="34" r="13" fill="#bfe6ff" stroke="#8a5a2b" stroke-width="3"/>
+            <rect x="8" y="60" width="36" height="52" rx="4" fill="#b5824a"/>
+            <circle cx="45" cy="66" r="3.5" fill="#ffd23f"/>
+          </g>
+        </g>
+
+        <!-- Couches dynamiques : tables, coussins/chiens, clients, effets -->
+        <g id="tables"></g>
+        <g id="cushions"></g>
+        <g id="customers-layer"></g>
+      </svg>
       <div id="hint" class="hidden">👇 Adopte ton premier chien !</div>
     </div>
   </main>
@@ -89,6 +190,7 @@
   <script src="state.js"></script>
   <script src="game.js"></script>
   <script src="audio.js"></script>
+  <script src="art.js"></script>
   <script src="ui.js"></script>
   <script src="customers.js"></script>
   <script src="main.js"></script>

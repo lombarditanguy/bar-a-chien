@@ -42,6 +42,10 @@ function playSound(name) {
       note(659, 0.09, 0.09);
       note(784, 0.18, 0.18);
       break;
+    case 'ding': // clochette du comptoir (commande)
+      note(1568, 0, 0.1, 'sine', 0.09);
+      note(2093, 0.09, 0.2, 'sine', 0.09);
+      break;
     case 'unlock': // fanfare de déblocage
       note(523, 0, 0.1);
       note(659, 0.1, 0.1);

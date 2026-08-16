@@ -1,5 +1,6 @@
 /* ============================================================
    Style cartoon mignon, mobile-first, gros boutons, peu de texte.
+   La scène du bar est entièrement dessinée en SVG (index.html + art.js).
    ============================================================ */
 
 * {
@@ -42,15 +43,15 @@ body {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  padding: 12px;
+  padding: 10px;
 }
 
 .coin-box {
   background: #fff;
   border: 4px solid var(--coin);
   border-radius: 999px;
-  padding: 8px 20px;
-  font-size: 1.5rem;
+  padding: 6px 20px;
+  font-size: 1.4rem;
   font-weight: bold;
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.12);
   display: flex;
@@ -63,17 +64,18 @@ body {
   color: #fff;
   border-radius: 999px;
   padding: 8px 16px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: bold;
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.12);
 }
 
-/* ---- La scène du bar ---- */
+/* ---- La scène du bar (SVG) ---- */
 
 #bar {
   flex: 1;
-  padding: 0 12px 10px;
+  padding: 0 10px 8px;
   display: flex;
+  min-height: 0;
 }
 
 #scene {
@@ -85,64 +87,98 @@ body {
   overflow: hidden;
   border: 5px solid var(--wood-dark);
   box-shadow: 0 6px 0 rgba(0, 0, 0, 0.15);
-  /* mur en haut (28%), plancher en bois en bas */
-  background:
-    linear-gradient(180deg,
-      #ffe0ee 0%, #ffe0ee 28%,
-      #d9a066 28%, #cf945c 29%,
-      #e8b77d 29%, #dfa96c 100%);
+  background: #ffe4ee;
 }
 
-#bar-title {
-  position: absolute;
-  top: 6px;
+#scene-svg {
+  display: block;
   width: 100%;
-  text-align: center;
-  font-size: 1.05rem;
-  font-weight: bold;
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
+  height: 100%;
 }
 
-#decor {
-  position: absolute;
-  top: 8%;
-  right: 16%;
-  font-size: 1.4rem;
-  letter-spacing: 4px;
+#scene-svg text {
+  font-family: inherit;
+  pointer-events: none;
 }
 
-#counter {
-  position: absolute;
-  left: 3%;
-  top: 15%;
-  width: 36%;
-  height: 13%;
-  background: linear-gradient(180deg, var(--wood) 0%, var(--wood-dark) 100%);
-  border-radius: 10px 10px 4px 4px;
-  border-bottom: 5px solid #7a4628;
-  text-align: center;
-}
-
+/* Le serveur s'anime doucement, plus vite quand il prépare une commande */
 #barman {
-  position: absolute;
-  top: -1.55rem;
-  left: 12%;
-  font-size: 1.8rem;
+  animation: barman-bob 2.4s ease-in-out infinite;
 }
 
-.counter-drinks {
-  position: absolute;
-  top: -0.7rem;
-  right: 10%;
-  font-size: 0.95rem;
-  letter-spacing: 2px;
+#barman.serving {
+  animation: barman-bob 0.4s ease-in-out infinite;
 }
 
-#door {
-  position: absolute;
-  right: 3%;
-  top: 12%;
-  font-size: 2.3rem;
+/* La porte s'ouvre quand un client passe */
+.door-panel {
+  transform-box: fill-box;
+  transform-origin: left center;
+  transition: transform 0.3s ease-in-out;
+}
+
+#door.open .door-panel {
+  transform: scaleX(0.18);
+}
+
+/* Les chiens respirent, remuent la queue, frétillent quand on les caresse */
+.spot.has-dog {
+  cursor: pointer;
+}
+
+.dog-wrap {
+  animation: dog-idle 1.9s ease-in-out infinite;
+}
+
+.spot:nth-child(2n) .dog-wrap { animation-delay: 0.4s; }
+.spot:nth-child(3n) .dog-wrap { animation-delay: 0.8s; }
+
+.dog-wrap.happy {
+  animation: wiggle 0.5s ease-in-out;
+}
+
+.tail {
+  transform-box: fill-box;
+  transform-origin: bottom left;
+  animation: tail-wag 0.9s ease-in-out infinite;
+}
+
+/* Les clients : marche (jambes + rebond), position assise */
+.customer {
+  transition-property: transform;
+  transition-timing-function: linear;
+}
+
+.customer .walker {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+
+.customer.walking .walker {
+  animation: walk-bob 0.34s linear infinite;
+}
+
+.leg {
+  transform-box: fill-box;
+  transform-origin: top center;
+}
+
+.customer.walking .leg:first-child { animation: step 0.34s linear infinite; }
+.customer.walking .leg:last-child { animation: step 0.34s linear infinite -0.17s; }
+
+.customer.sitting .legs {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  transform: scaleY(0.3);
+}
+
+.customer .bubble.hidden { display: none; }
+
+/* Le verre posé sur la table "tremble" à chaque gorgée */
+.drink-slot .drink {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: sip 1.3s ease-in-out infinite;
 }
 
 #hint {
@@ -155,119 +191,11 @@ body {
   padding: 10px 18px;
   font-weight: bold;
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
-  animation: bounce 1.2s ease-in-out infinite;
+  animation: hint-bounce 1.2s ease-in-out infinite;
   white-space: nowrap;
 }
 
 #hint.hidden { display: none; }
-
-/* Coussins et chiens, positionnés en % dans la scène */
-
-.spot {
-  position: absolute;
-  width: 72px;
-  margin-left: -36px;
-  margin-top: -20px;
-  text-align: center;
-  z-index: 2;
-}
-
-.spot.has-dog { cursor: pointer; }
-.spot.has-dog:active .dog-emoji { transform: scale(0.9); }
-
-.cushion {
-  width: 46px;
-  height: 14px;
-  margin: -8px auto 2px;
-  background: var(--pink);
-  border-radius: 50%;
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
-}
-
-.spot.empty .cushion { opacity: 0.45; }
-
-.spot .bone {
-  font-size: 1.1rem;
-  opacity: 0.5;
-  line-height: 1.8;
-}
-
-.dog-emoji {
-  font-size: 2.1rem;
-  position: relative;
-  z-index: 2;
-  animation: bounce 1.6s ease-in-out infinite;
-}
-
-/* Chaque chien rebondit avec un léger décalage pour un effet vivant */
-.spot:nth-child(2n) .dog-emoji { animation-delay: 0.3s; }
-.spot:nth-child(3n) .dog-emoji { animation-delay: 0.6s; }
-
-.dog-emoji.happy {
-  animation: wiggle 0.5s ease-in-out;
-}
-
-.dog-accs {
-  position: absolute;
-  top: -0.4rem;
-  right: 2px;
-  font-size: 0.75rem;
-  z-index: 3;
-}
-
-.dog-name {
-  font-size: 0.62rem;
-  font-weight: bold;
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 999px;
-  padding: 1px 6px;
-  max-width: 95%;
-  margin: 0 auto;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.pencil {
-  font-size: 0.55rem;
-  opacity: 0.6;
-}
-
-/* ---- Les clients ---- */
-
-.customer {
-  position: absolute;
-  margin-left: -0.9rem;
-  margin-top: -1rem;
-  font-size: 1.8rem;
-  z-index: 4;
-  transition: left 1.6s ease-in-out, top 1.6s ease-in-out;
-  pointer-events: none;
-}
-
-.customer .bubble {
-  position: absolute;
-  top: -1.15em;
-  left: 55%;
-  font-size: 1.05rem;
-  background: #fff;
-  border-radius: 999px;
-  padding: 2px 6px;
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
-  animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.customer .bubble.hidden { display: none; }
-
-.coin-fly {
-  position: fixed;
-  font-size: 1.3rem;
-  z-index: 30;
-  pointer-events: none;
-  transition: left 0.8s cubic-bezier(0.5, -0.2, 0.8, 0.5),
-              top 0.8s cubic-bezier(0.5, -0.2, 0.8, 0.5),
-              transform 0.8s;
-}
 
 /* ---- Boutique ---- */
 
@@ -337,23 +265,29 @@ body {
 .modal-card {
   background: #fff;
   border-radius: 24px;
-  padding: 28px 24px;
+  padding: 24px 22px;
   text-align: center;
-  max-width: 300px;
-  width: 88%;
+  max-width: 310px;
+  width: 90%;
   box-shadow: 0 8px 0 rgba(0, 0, 0, 0.2);
   animation: pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 13px;
   font-size: 1.05rem;
 }
 
-.modal-emoji { font-size: 3rem; }
+.modal-emoji { font-size: 3rem; line-height: 1; }
 
 .modal-title {
   font-size: 1.2rem;
   font-weight: bold;
+}
+
+.modal-coins {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #d99a00;
 }
 
 .dog-income-line {
@@ -375,7 +309,7 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 12px;
+  padding: 7px 12px;
   border: 3px solid var(--grass);
   border-radius: 14px;
   background: #fffaf2;
@@ -400,12 +334,18 @@ body {
   border-style: dashed;
 }
 
+.breed-btn.locked .breed-thumb {
+  filter: grayscale(1) opacity(0.6);
+}
+
 .acc-btn.owned {
   border-color: var(--green);
   cursor: default;
 }
 
-.breed-emoji, .acc-emoji { font-size: 1.8rem; }
+.breed-thumb svg { display: block; }
+
+.acc-emoji { font-size: 1.8rem; }
 
 .breed-info, .acc-info {
   flex: 1;
@@ -444,12 +384,6 @@ body {
   cursor: pointer;
 }
 
-.modal-coins {
-  font-size: 1.6rem;
-  font-weight: bold;
-  color: #d99a00;
-}
-
 #name-input {
   font-family: inherit;
   font-size: 1.1rem;
@@ -479,7 +413,7 @@ body {
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
 }
 
-/* ---- Divers ---- */
+/* ---- Effets (calque HTML au-dessus de la scène) ---- */
 
 .float-text {
   position: fixed;
@@ -489,6 +423,21 @@ body {
   z-index: 20;
   animation: float-up 0.9s ease-out forwards;
   text-shadow: 1px 1px 0 #fff;
+}
+
+/* Pièce dorée dessinée en CSS, qui vole vers le compteur */
+.coin-fly {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffe89a 0%, var(--coin) 55%, #e0a800 100%);
+  border: 2px solid #c79400;
+  z-index: 30;
+  pointer-events: none;
+  transition: left 0.8s cubic-bezier(0.5, -0.2, 0.8, 0.5),
+              top 0.8s cubic-bezier(0.5, -0.2, 0.8, 0.5),
+              transform 0.8s;
 }
 
 #btn-reset, #btn-sound {
@@ -509,15 +458,45 @@ body {
 
 /* ---- Animations ---- */
 
-@keyframes bounce {
+@keyframes dog-idle {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-7px); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes tail-wag {
+  0%, 100% { transform: rotate(0); }
+  50% { transform: rotate(16deg); }
 }
 
 @keyframes wiggle {
   0%, 100% { transform: rotate(0) scale(1); }
-  25% { transform: rotate(-12deg) scale(1.25); }
-  75% { transform: rotate(12deg) scale(1.25); }
+  25% { transform: rotate(-8deg) scale(1.15); }
+  75% { transform: rotate(8deg) scale(1.15); }
+}
+
+@keyframes walk-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2.5px); }
+}
+
+@keyframes step {
+  0%, 100% { transform: rotate(22deg); }
+  50% { transform: rotate(-22deg); }
+}
+
+@keyframes barman-bob {
+  0%, 100% { transform: translate(52px, 120px); }
+  50% { transform: translate(52px, 117px); }
+}
+
+@keyframes sip {
+  0%, 100% { transform: rotate(0); }
+  50% { transform: rotate(-9deg); }
+}
+
+@keyframes hint-bounce {
+  0%, 100% { transform: translate(-50%, -50%); }
+  50% { transform: translate(-50%, -60%); }
 }
 
 @keyframes pop-in {

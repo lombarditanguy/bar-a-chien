@@ -55,13 +55,17 @@ const CONFIG = {
 
   // Clients : plus les chiens sont nombreux/mignons (attraction), plus
   // ils arrivent vite. Intervalle entre deux clients, en secondes.
+  // Parcours d'un client : porte → comptoir (commande) → coussin d'un chien
+  // (boit, caresse le chien) → paie → porte.
   customers: {
-    maxIntervalSec: 10,   // avec 1 petit chien
+    maxIntervalSec: 8,    // avec 1 petit chien
     minIntervalSec: 2.2,  // rythme maxi, ensuite chaque client paie plus
     emojis: ['🧒', '👧', '👦', '👩', '🧔', '👨‍🦰', '👱‍♀️', '👵', '👴', '👩‍🦱'],
     drinks: ['🥤', '🧃', '🧋', '🍹', '☕', '🍫'],
-    walkMs: 1600,   // temps pour entrer / sortir
-    drinkMs: 2600,  // temps assis avant de payer
+    orderMs: 1100,  // pause au comptoir pour commander
+    drinkMs: 2400,  // temps assis à boire
+    petMs: 1500,    // temps passé à caresser le chien
+    walkMsPerUnit: 9, // vitesse de marche (ms par unité SVG parcourue)
   },
 
   // Gains hors-ligne : 50% du revenu normal, plafonnés à 8h
