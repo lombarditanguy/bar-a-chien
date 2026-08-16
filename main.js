@@ -26,6 +26,9 @@
   }
   requestAnimationFrame(loop);
 
+  // Pièce décorative qui s'envole d'un chien de temps en temps
+  setInterval(ambientCoin, CONFIG.ambientCoinIntervalMs);
+
   // Sauvegarde automatique
   setInterval(saveState, CONFIG.autosaveIntervalMs);
   document.addEventListener('visibilitychange', () => {

@@ -6,11 +6,15 @@ function defaultState() {
   return {
     coins: CONFIG.startCoins,
     slots: CONFIG.startSlots,
-    // Chaque chien : { id, name, breed (index dans CONFIG.breeds) }
+    // Chaque chien : { id, name, breed (id de race), accessories: [ids] }
     dogs: [],
+    unlockedBreeds: ['chiot'],
     upgrades: {
       kibbleLevel: 0,
       expandBought: 0,
+    },
+    settings: {
+      sound: true,
     },
     // Prévu pour la monétisation future (pub récompensée = multiplicateur
     // temporaire, crédits premium...). Rien n'est branché pour l'instant.
@@ -42,13 +46,33 @@ function loadState() {
     const saved = JSON.parse(raw);
     // Fusion avec l'état par défaut : les vieilles sauvegardes restent
     // compatibles quand on ajoute de nouveaux champs.
-    state = Object.assign(defaultState(), saved);
-    state.upgrades = Object.assign(defaultState().upgrades, saved.upgrades);
-    state.boosts = Object.assign(defaultState().boosts, saved.boosts);
+    const def = defaultState();
+    state = Object.assign(def, saved);
+    state.upgrades = Object.assign(def.upgrades, saved.upgrades);
+    state.settings = Object.assign(def.settings, saved.settings);
+    state.boosts = Object.assign(def.boosts, saved.boosts);
+    migrateSave();
     return true;
   } catch (e) {
     return false;
   }
+}
+
+// Compatibilité avec les sauvegardes du premier prototype
+function migrateSave() {
+  if (!Array.isArray(state.unlockedBreeds) || state.unlockedBreeds.length === 0) {
+    state.unlockedBreeds = ['chiot'];
+  }
+  state.dogs.forEach(dog => {
+    // Avant, breed était un index numérique ; maintenant c'est un id
+    if (typeof dog.breed === 'number') {
+      const breed = CONFIG.breeds[dog.breed] || CONFIG.breeds[0];
+      dog.breed = breed.id;
+      if (!state.unlockedBreeds.includes(breed.id)) state.unlockedBreeds.push(breed.id);
+    }
+    if (!CONFIG.breeds.some(b => b.id === dog.breed)) dog.breed = 'chiot';
+    if (!Array.isArray(dog.accessories)) dog.accessories = [];
+  });
 }
 
 function resetState() {

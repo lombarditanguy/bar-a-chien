@@ -136,6 +136,11 @@ body {
   animation: wiggle 0.5s ease-in-out;
 }
 
+.dog-accs {
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+}
+
 .dog-name {
   font-size: 0.75rem;
   font-weight: bold;
@@ -235,6 +240,99 @@ body {
 
 .modal-emoji { font-size: 3rem; }
 
+.modal-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.dog-income-line {
+  font-weight: bold;
+  color: #d99a00;
+}
+
+/* Listes de races et d'accessoires dans les popups */
+
+#breed-list, #acc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 45vh;
+  overflow-y: auto;
+}
+
+.breed-btn, .acc-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 3px solid var(--grass);
+  border-radius: 14px;
+  background: #fffaf2;
+  font-family: inherit;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.1s;
+}
+
+.breed-btn:active:not(:disabled), .acc-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.breed-btn:disabled, .acc-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.breed-btn.locked {
+  background: #f0eae2;
+  border-style: dashed;
+}
+
+.acc-btn.owned {
+  border-color: var(--green);
+  cursor: default;
+}
+
+.breed-emoji, .acc-emoji { font-size: 1.8rem; }
+
+.breed-info, .acc-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.breed-info small, .acc-info small {
+  color: #9a8570;
+}
+
+.breed-price, .acc-price {
+  font-size: 0.85rem;
+  font-weight: bold;
+  background: var(--coin);
+  border-radius: 999px;
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+
+.acc-btn.owned .acc-price {
+  background: var(--green);
+  color: #fff;
+}
+
+.small-btn {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: var(--text);
+  background: var(--grass);
+  border: none;
+  border-radius: 14px;
+  padding: 10px;
+  cursor: pointer;
+}
+
 .modal-coins {
   font-size: 1.6rem;
   font-weight: bold;
@@ -282,10 +380,9 @@ body {
   text-shadow: 1px 1px 0 #fff;
 }
 
-#btn-reset {
+#btn-reset, #btn-sound {
   position: fixed;
   top: 12px;
-  right: 12px;
   border: none;
   background: rgba(255, 255, 255, 0.6);
   border-radius: 50%;
@@ -295,6 +392,9 @@ body {
   cursor: pointer;
   opacity: 0.6;
 }
+
+#btn-reset { right: 12px; }
+#btn-sound { right: 56px; }
 
 /* ---- Animations ---- */
 

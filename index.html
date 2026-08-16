@@ -52,22 +52,34 @@
     </div>
   </div>
 
-  <!-- Popup pour nommer un chien -->
-  <div id="name-modal" class="modal hidden">
+  <!-- Popup d'adoption : choix de la race (déblocage inclus) -->
+  <div id="adopt-modal" class="modal hidden">
     <div class="modal-card">
-      <div class="modal-emoji" id="name-modal-emoji">🐶</div>
-      <p>Comment s'appelle ce chien ?</p>
-      <input id="name-input" type="text" maxlength="14" autocomplete="off">
-      <button id="btn-name-ok" class="big-btn">C'est son nom !</button>
+      <p class="modal-title">Choisis un chien !</p>
+      <div id="breed-list"></div>
+      <button id="btn-adopt-close" class="small-btn">Fermer</button>
     </div>
   </div>
 
+  <!-- Popup d'un chien : nom + accessoires -->
+  <div id="dog-modal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-emoji" id="dog-modal-emoji">🐶</div>
+      <input id="name-input" type="text" maxlength="14" autocomplete="off">
+      <p class="dog-income-line">🪙 <span id="dog-modal-income">0</span> /s</p>
+      <div id="acc-list"></div>
+      <button id="btn-dog-ok" class="big-btn">Super !</button>
+    </div>
+  </div>
+
+  <button id="btn-sound" title="Son">🔊</button>
   <button id="btn-reset" title="Réinitialiser la partie">🔄</button>
 
   <!-- Ordre de chargement important (pas de modules ES pour rester jouable en file://) -->
   <script src="config.js"></script>
   <script src="state.js"></script>
   <script src="game.js"></script>
+  <script src="audio.js"></script>
   <script src="ui.js"></script>
   <script src="main.js"></script>
 </body>
