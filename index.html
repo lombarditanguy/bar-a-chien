@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>🐶 Bar à Chiens</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Bandeau du haut : compteur de pièces toujours visible -->
+  <header id="topbar">
+    <div class="coin-box">
+      <span class="coin-icon">🪙</span>
+      <span id="coin-count">0</span>
+    </div>
+    <div class="income-box" id="income-rate">+0 /s</div>
+  </header>
+
+  <!-- Le bar : grille d'emplacements pour chiens -->
+  <main id="bar">
+    <h1 id="bar-title">🐾 Mon Bar à Chiens 🐾</h1>
+    <div id="slots"></div>
+  </main>
+
+  <!-- Boutique en bas : gros boutons, peu de texte -->
+  <footer id="shop">
+    <button id="btn-adopt" class="shop-btn">
+      <span class="shop-emoji">🐶</span>
+      <span class="shop-label">Adopter</span>
+      <span class="shop-cost" id="cost-adopt">🪙 10</span>
+    </button>
+    <button id="btn-kibble" class="shop-btn">
+      <span class="shop-emoji">🍖</span>
+      <span class="shop-label">Croquettes <span id="lvl-kibble" class="lvl"></span></span>
+      <span class="shop-cost" id="cost-kibble">🪙 50</span>
+    </button>
+    <button id="btn-expand" class="shop-btn">
+      <span class="shop-emoji">🏠</span>
+      <span class="shop-label">Agrandir</span>
+      <span class="shop-cost" id="cost-expand">🪙 100</span>
+    </button>
+  </footer>
+
+  <!-- Popup "bon retour" : gains hors-ligne -->
+  <div id="welcome-back" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-emoji">🐕💤</div>
+      <p>Tes chiens ont travaillé pendant ton absence !</p>
+      <p class="modal-coins">+<span id="offline-coins">0</span> 🪙</p>
+      <button id="btn-collect" class="big-btn">Récupérer !</button>
+    </div>
+  </div>
+
+  <!-- Popup pour nommer un chien -->
+  <div id="name-modal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-emoji" id="name-modal-emoji">🐶</div>
+      <p>Comment s'appelle ce chien ?</p>
+      <input id="name-input" type="text" maxlength="14" autocomplete="off">
+      <button id="btn-name-ok" class="big-btn">C'est son nom !</button>
+    </div>
+  </div>
+
+  <button id="btn-reset" title="Réinitialiser la partie">🔄</button>
+
+  <!-- Ordre de chargement important (pas de modules ES pour rester jouable en file://) -->
+  <script src="config.js"></script>
+  <script src="state.js"></script>
+  <script src="game.js"></script>
+  <script src="ui.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
